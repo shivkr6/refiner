@@ -118,16 +118,14 @@ class LeRobotV2_1EpisodeReader(BaseSource):
         self, root: DataFolder
     ) -> tuple[LeRobotMetadata, dict[int, LeRobotStatsFile]]:
         """Load one dataset root's info, tasks, and episode-level stats files."""
-        # 1. Load info
+
         with root.file(_INFO_JSON).open("rb") as handle:
             info = LeRobotInfo.from_json_dict(json.loads(handle.read()))
 
-        # 2. Load tasks
         with root.file(_TASKS_JSONL).open("rb") as handle:
             task_rows = [json.loads(line) for line in handle]
             tasks = LeRobotTasks.from_rows(task_rows)
 
-        # 3. Load and aggregate stats
         episode_stats_map: dict[int, LeRobotStatsFile] = {}
         with root.file(_STATS_JSONL).open("rb") as handle:
             for line in handle:
