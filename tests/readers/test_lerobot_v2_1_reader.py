@@ -63,10 +63,7 @@ def _build_sample_dataset(
     )
     _write_jsonl(
         meta / "tasks.jsonl",
-        [
-            {"task_index": idx, "task": task}
-            for idx, task in index_to_task.items()
-        ],
+        [{"task_index": idx, "task": task} for idx, task in index_to_task.items()],
     )
     _write_jsonl(
         meta / "episodes.jsonl",
@@ -222,7 +219,9 @@ def test_lerobot_v2_1_reader_raises_on_malformed_frame_count(tmp_path: Path) -> 
         _episode_rows(reader)
 
 
-def test_lerobot_v2_1_reader_can_skip_malformed_rows(tmp_path: Path, monkeypatch) -> None:
+def test_lerobot_v2_1_reader_can_skip_malformed_rows(
+    tmp_path: Path, monkeypatch
+) -> None:
     root = tmp_path / "lerobot"
     _build_sample_dataset(root)
     _write_parquet(
@@ -261,7 +260,9 @@ def test_lerobot_v2_1_reader_can_skip_malformed_rows(tmp_path: Path, monkeypatch
     ]
 
 
-def test_lerobot_v2_1_reader_exposes_episode_shard_planning_knobs(tmp_path: Path) -> None:
+def test_lerobot_v2_1_reader_exposes_episode_shard_planning_knobs(
+    tmp_path: Path,
+) -> None:
     root = tmp_path / "lerobot"
     _build_sample_dataset(root)
 
@@ -276,7 +277,9 @@ def test_lerobot_v2_1_vectorized_filter_realigns_side_data(tmp_path: Path) -> No
     _build_sample_dataset(root)
 
     rows = (
-        mdr.read_lerobot_v2_1(str(root)).filter(mdr.col("episode_index") == 1).materialize()
+        mdr.read_lerobot_v2_1(str(root))
+        .filter(mdr.col("episode_index") == 1)
+        .materialize()
     )
 
     assert len(rows) == 1
@@ -287,7 +290,9 @@ def test_lerobot_v2_1_vectorized_filter_realigns_side_data(tmp_path: Path) -> No
     assert [int(frame["index"]) for frame in frame_rows] == [2, 3]
 
 
-def test_lerobot_v2_1_row_preserving_vectorized_ops_keep_side_data(tmp_path: Path) -> None:
+def test_lerobot_v2_1_row_preserving_vectorized_ops_keep_side_data(
+    tmp_path: Path,
+) -> None:
     root = tmp_path / "lerobot"
     _build_sample_dataset(root)
 

@@ -389,9 +389,7 @@ class LeRobotWriterSink(BaseSink):
 
         if isinstance(row, LeRobotRow):
             video_inputs = list(row.videos.items())
-            base_row = row._row.drop(
-                *(f"videos/{key}/uri" for key, _ in video_inputs)
-            )
+            base_row = row._row.drop(*(f"videos/{key}/uri" for key, _ in video_inputs))
             source_stats_by_key = {key: row.stats.get(key) for key, _ in video_inputs}
             frame_count = row.length
         else:
