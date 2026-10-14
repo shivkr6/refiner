@@ -65,6 +65,10 @@ class LeRobotV2_1EpisodeReader(BaseSource):
         self._episode_reader = None
         self._warned_malformed_row = False
 
+    def describe(self) -> dict[str, Any]:
+        inputs = [entry.abs_path() for entry in self._root_fileset.entries]
+        return {"path": ", ".join(inputs), "inputs": inputs}
+
     @property
     def roots(self) -> tuple[DataFolder, ...]:
         if self._roots is None:
